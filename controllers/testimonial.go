@@ -3,14 +3,15 @@ package controllers
 import (
 	"my-trips-api/database"
 	"my-trips-api/models"
+	"my-trips-api/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetAllTestimonials(c *gin.Context) {
-	var testimonials []models.Testimonial
-	if err := database.DB.Find(&testimonials).Error; err != nil {
+	testimonials, err := services.GetAllTestimonials()
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -24,7 +25,7 @@ func CreateTestimonial(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Create(&testimonial).Error; err != nil {
+	if err := services.CreateTestimonial(&testimonial); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -46,22 +47,21 @@ func UpdateTestimonialByID(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Save(&testimonial).Error; err != nil {
+	if err := services.UpdateTestimonialByID(&testimonial); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusAccepted, testimonial)
-
+	c.JSON(http.StatusOK, testimonial)
 }
 
 func DeleteTestimonialByID(c *gin.Context) {
-
 	var testimonial models.Testimonial
-	id := c.Param("id")
 
-	database.DB.Delete(&testimonial, id)
-	c.JSON(http.StatusNoContent, gin.H{
-		"message": "Testimonial deleted successfully"})
+	if err := services.DeleteTestimonialByID(&testimonial); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
+	c.JSON(http.StatusOK, gin.H{"message": "Testimonial deleted successfully"})
 }
