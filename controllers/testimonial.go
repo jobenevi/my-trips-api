@@ -8,44 +8,51 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func GetAllTestimonials(c *gin.Context) {
+	var testimonials []models.Testimonial
+	if err := database.DB.Find(&testimonials).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, testimonials)
+}
+
 func CreateTestimonial(c *gin.Context) {
-
 	var testimonial models.Testimonial
-
 	if err := c.ShouldBindJSON(&testimonial); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	database.DB.Create(&testimonial)
+	if err := database.DB.Create(&testimonial).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusCreated, testimonial)
-
-}
-
-func GetAllTestimonials(c *gin.Context) {
-
-	var testimonials []models.Testimonial
-	database.DB.Find(&testimonials)
-	c.JSON(http.StatusOK, testimonials)
-
 }
 
 func UpdateTestimonialByID(c *gin.Context) {
-
 	var testimonial models.Testimonial
 	id := c.Param("id")
 
-	database.DB.First(&testimonial, id)
-
-	if err := c.ShouldBindJSON(&testimonial); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error()})
+	if err := database.DB.First(&testimonial, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Testimonial not found"})
 		return
 	}
 
-	database.DB.Model(&testimonial).UpdateColumns(testimonial)
-	c.JSON(http.StatusOK, testimonial)
+	if err := c.ShouldBindJSON(&testimonial); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := database.DB.Save(&testimonial).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusAccepted, testimonial)
+
 }
 
 func DeleteTestimonialByID(c *gin.Context) {

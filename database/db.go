@@ -14,10 +14,10 @@ var (
 )
 
 func ConnectionToDatabase() {
-	stringDeConexao := "host=localhost user=root password=root dbname=root port=5432 sslmode=disable"
-	DB, err = gorm.Open(postgres.Open(stringDeConexao))
+	stringConnection := "host=localhost user=root password=root dbname=root port=5432 sslmode=disable"
+	DB, err = gorm.Open(postgres.Open(stringConnection))
 	if err != nil {
 		log.Panic("Error connecting to database")
 	}
-	DB.AutoMigrate(&models.Testimonial{}, &models.User{})
+	DB.AutoMigrate(&models.Testimonial{})
 }

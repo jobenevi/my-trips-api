@@ -7,13 +7,10 @@ import (
 )
 
 func HandlerRequests() {
-
 	router := gin.Default()
-
 	router.GET("/testimonials", controllers.GetAllTestimonials)
 	router.POST("/testimonials", controllers.CreateTestimonial)
-	router.PUT("/testimonials/:id", controllers.UpdateTestimonialByID)
+	router.PATCH("/testimonials/:id", controllers.UpdateTestimonialByID)
 	router.DELETE("/testimonials/:id", controllers.DeleteTestimonialByID)
-
 	router.Run()
 }
