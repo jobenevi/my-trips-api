@@ -4,17 +4,17 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=root      
+      - POSTGRES_DB=root
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data  
+      - /home/jbenevides/data/postgres-data:/var/lib/postgresql/data  
 
   pgadmin-compose:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: "jonatasmarques09@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "123456"
+      - PGADMIN_DEFAULT_EMAIL=test@test.com
+      - PGADMIN_DEFAULT_PASSWORD=root123
     ports:
       - "54321:80"
     depends_on:

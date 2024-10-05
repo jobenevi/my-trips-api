@@ -12,5 +12,6 @@ func HandlerRequests() {
 	router.POST("/testimonials", controllers.CreateTestimonial)
 	router.PATCH("/testimonials/:id", controllers.UpdateTestimonialByID)
 	router.DELETE("/testimonials/:id", controllers.DeleteTestimonialByID)
+	router.GET("/testimonials-home", controllers.GetTestimonialsHome)
 	router.Run()
 }

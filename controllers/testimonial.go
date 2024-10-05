@@ -65,3 +65,12 @@ func DeleteTestimonialByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Testimonial deleted successfully"})
 }
+
+func GetTestimonialsHome(c *gin.Context) {
+	testimonials, err := services.GetTestimonialsHomeRandom()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, testimonials)
+}
