@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"my-trips-api/database"
-	"my-trips-api/models"
-	"my-trips-api/services"
+	"my-trips-api/internal/database"
+	"my-trips-api/internal/models"
+	"my-trips-api/internal/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

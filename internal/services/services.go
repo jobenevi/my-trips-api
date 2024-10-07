@@ -1,9 +1,9 @@
 package services
 
 import (
-	"my-trips-api/database"
-	"my-trips-api/models"
-	"my-trips-api/models/dto"
+	"my-trips-api/internal/database"
+	"my-trips-api/internal/models"
+	"my-trips-api/internal/models/dto"
 )
 
 func GetAllTestimonials() ([]models.Testimonial, error) {
@@ -51,13 +51,11 @@ func DeleteTestimonialByID(testimonial *models.Testimonial) error {
 
 func GetTestimonialsHomeRandom() ([]dto.TestimonialHomeDTO, error) {
 
-	//find db limit 3 random order of testimonials
 	var testimonials []models.Testimonial
 	if err := database.DB.Order("RANDOM()").Limit(3).Find(&testimonials).Error; err != nil {
 		return nil, err
 	}
 
-	//convert the tree testimonials to dto
 	var testimonialsHomeDTO []dto.TestimonialHomeDTO
 	for _, testimonial := range testimonials {
 		testimonialsHomeDTO = append(testimonialsHomeDTO, dto.ConvertTestimoninalToTestimonialHomeDTO(&testimonial))
