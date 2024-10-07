@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    volumes:
+      - $HOME/data/postgres-data:/var/lib/postgresql/data
+    env_file:
+      - cmd/server/.env
+
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    ports:
+      - "54321:80"
+    depends_on:
+      - postgres
+    env_file:
+      - cmd/server/.env

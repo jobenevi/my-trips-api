@@ -1,6 +1,6 @@
 package dto
 
-import "my-trips-api/models"
+import "my-trips-api/internal/models"
 
 type TestimonialHomeDTO struct {
 	ID           int    `json:"id"`
