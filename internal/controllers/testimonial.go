@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"my-trips-api/internal/database"
 	"my-trips-api/internal/models"
 	"my-trips-api/internal/services"
 	"net/http"
@@ -35,13 +34,6 @@ func CreateTestimonial(c *gin.Context) {
 
 func UpdateTestimonialByID(c *gin.Context) {
 	var testimonial models.Testimonial
-	id := c.Param("id")
-
-	if err := database.DB.First(&testimonial, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Testimonial not found"})
-		return
-	}
-
 	if err := c.ShouldBindJSON(&testimonial); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

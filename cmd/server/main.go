@@ -8,13 +8,11 @@ import (
 )
 
 func main() {
-
 	_, err := config.LoadConfig("cmd/server")
 	if err != nil {
-		log.Panic("Error loading config")
+		log.Printf("Error loading config: %v", err)
 	}
 
 	database.ConnectionToDatabase()
 	routes.HandlerRequests()
-
 }
