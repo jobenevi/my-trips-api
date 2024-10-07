@@ -1,11 +1,11 @@
 package config
 
 import (
+	"log"
+
 	"github.com/go-chi/jwtauth"
 	"github.com/spf13/viper"
 )
-
-var cfg Config
 
 type Config struct {
 	DatabaseDriver   string `mapstructure:"DATABASE_DRIVER"`
@@ -20,16 +20,17 @@ type Config struct {
 	JWTAuth          *jwtauth.JWTAuth
 }
 
+var cfg Config
+
 func LoadConfig(path string) (*Config, error) {
-	viper.SetConfigName("APP_ENV")
 	viper.SetConfigType("env")
+	viper.SetConfigName(".env")
 	viper.AddConfigPath(path)
-	viper.SetConfigFile(".env")
 	viper.AutomaticEnv()
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(err)
+		log.Printf("Error reading config file, %s", err)
 	}
 
 	err = viper.Unmarshal(&cfg)
@@ -40,7 +41,6 @@ func LoadConfig(path string) (*Config, error) {
 	cfg.JWTAuth = jwtauth.New("HS256", []byte(cfg.JWTSecret), nil)
 
 	return &cfg, nil
-
 }
 
 func BuildStringConnection() string {
@@ -48,6 +48,5 @@ func BuildStringConnection() string {
 		" port=" + cfg.DatabasePort +
 		" user=" + cfg.DatabaseUser +
 		" dbname=" + cfg.DatabaseName +
-		" password=" + cfg.DatabasePassword +
-		" sslmode=disable"
+		" password=" + cfg.DatabasePassword
 }
